@@ -1,0 +1,8 @@
+format: jb-book
+root: index
+
+chapters:
+  - file: abstract
+  - file: reproducing
+  - file: demo
+  - file: citation
