@@ -23,7 +23,7 @@ jobs:
         run: python3 -m pip install -r requirements-docs.txt
 
       - name: Build docs
-        run: jupyter book build -W docs
+        run: jupyter book build docs
 
       - name: Copy Dockerfile into gh-pages
         run: cp Dockerfile ${PUBLISH_DIR}/
