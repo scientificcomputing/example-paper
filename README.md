@@ -24,7 +24,7 @@ Add steps for pre-processing, e.g
 
 ```
 cd code
-python pre-processing.py
+python3 pre-processing.py
 ```
 
 ### Running simulation
@@ -32,7 +32,7 @@ Add steps for running simulations, e.g
 
 ```
 cd code
-python run_all.py
+python3 run_all.py
 ```
 
 
@@ -41,7 +41,7 @@ Add steps for postprocessing / reproducing figures and tables in the paper, e.g
 
 ```
 cd code
-python postprocess.py
+python3 postprocess.py
 ```
 
 ## Citation
