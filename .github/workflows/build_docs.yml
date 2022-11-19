@@ -28,6 +28,11 @@ jobs:
       - name: Copy requirements.txt into gh-pages
         run: cp requirements.txt ${PUBLISH_DIR}/
 
+      - name: Copy code and data into gh-pages
+        run: |
+          cp -r code ${PUBLISH_DIR}/
+          cp -r data ${PUBLISH_DIR}/
+
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
