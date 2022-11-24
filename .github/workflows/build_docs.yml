@@ -39,7 +39,7 @@ jobs:
         run: python3 -m pip install -r requirements-docs.txt
 
       - name: Build docs
-        run: jupyter book build docs
+        run: jupyter book build .
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
