@@ -3,7 +3,7 @@
 
 title: Example paper
 author: Henrik Finsberg
-logo: "logo.png"
+logo: "docs/logo.png"
 copyright: "2022"
 
 # Force re-execution of notebooks on each build.
@@ -14,8 +14,7 @@ execute:
 # Information about where the book exists on the web
 repository:
   url: https://github.com/scientificcomputing/example-paper # Online location of your book
-  path_to_book: _sources # Optional path to your book, relative to the repository root
-  branch: gh-pages  # Which branch of the repository should be used when creating links (optional)
+  branch: main  # Which branch of the repository should be used when creating links (optional)
 
 launch_buttons:
   notebook_interface: "jupyterlab" # The interface interactive links will activate ["classic", "jupyterlab"]
@@ -33,7 +32,7 @@ parse:
 
 sphinx:
   config:
-    bibtex_bibfiles: ["refs.bib"]
+    bibtex_bibfiles: ["docs/refs.bib"]
 
   extra_extensions:
   - 'sphinx.ext.autodoc'
