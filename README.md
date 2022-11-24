@@ -1,5 +1,5 @@
 # Supplementary code for the paper: Title of paper
-
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/scientificcomputing/example-paper/HEAD)
 
 This repository contains supplementary code for the paper
 > Finsberg, H., Dokken, J. 2022.
