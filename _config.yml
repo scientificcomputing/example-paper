@@ -33,6 +33,7 @@ parse:
 sphinx:
   config:
     bibtex_bibfiles: ["docs/refs.bib"]
+    html_last_updated_fmt: "%b %d, %Y"
 
   extra_extensions:
   - 'sphinx.ext.autodoc'
