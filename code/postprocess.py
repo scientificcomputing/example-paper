@@ -169,8 +169,8 @@ def figure1(
     fig.savefig(fname, bbox_inches="tight", dpi=500)
     print(f"Save figure 1 to {fname}")
 
-    assert np.isclose(results[0].v.max(), 1.102052889)
-    assert np.isclose(results[0].w.max(), 0.668941310)
+    assert np.isclose(results[0].v.max(), 1.102052889, rtol=1e-6)
+    assert np.isclose(results[0].w.max(), 0.668941310, rtol=1e-6)
 
 
 def table1(results: list[Result], outfile: Path):
