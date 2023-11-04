@@ -169,8 +169,9 @@ def figure1(
     fig.savefig(fname, bbox_inches="tight", dpi=500)
     print(f"Save figure 1 to {fname}")
 
-    assert np.isclose(results[0].v.max(), 1.1020528, rtol=1e-3), results[0].v.max()
-    assert np.isclose(results[0].w.max(), 0.6689413, rtol=1e-3), results[0].w.max()
+    r1 = next(filter(lambda d: np.allclose((d.a, d.b), (-0.3, 1.1)), results))
+    assert np.isclose(r1.v.max(), 1.1020528, rtol=1e-6), r1.v.max()
+    assert np.isclose(r1.w.max(), 0.6689413, rtol=1e-6), r1.w.max()
 
 
 def table1(results: list[Result], outfile: Path):
@@ -190,11 +191,13 @@ def table1(results: list[Result], outfile: Path):
 
     assert len(data) == 6
 
-    assert np.isclose(data[0]["APD50 (V)"], 26.620362, rtol=1e-3), data[0]["APD50 (V)"]
-    assert np.isclose(data[0]["APD50 (W)"], 27.078644, rtol=1e-3), data[0]["APD50 (W)"]
+    r1 = next(filter(lambda d: np.allclose((d["a"], d["b"]), (-0.2, 1.1)), data))
+    assert np.isclose(r1["APD50 (V)"], 32.3730067, rtol=1e-6), r1["APD50 (V)"]
+    assert np.isclose(r1["APD50 (W)"], 31.8498996, rtol=1e-6), r1["APD50 (W)"]
 
-    assert np.isclose(data[1]["APD50 (V)"], 27.658528, rtol=1e-3), data[1]["APD50 (V)"]
-    assert np.isclose(data[1]["APD50 (W)"], 28.013365, rtol=1e-3), data[1]["APD50 (W)"]
+    r2 = next(filter(lambda d: np.allclose((d["a"], d["b"]), (-0.3, 1.2)), data))
+    assert np.isclose(r2["APD50 (V)"], 28.9285658187, rtol=1e-6), r2["APD50 (V)"]
+    assert np.isclose(r2["APD50 (W)"], 29.1713021926, rtol=1e-6), r2["APD50 (W)"]
 
     df = pd.DataFrame(data)
     table = df.style.to_latex()
