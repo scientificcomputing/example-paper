@@ -81,6 +81,7 @@ jinja2==3.1.2
     # via
     #   jupyter-book
     #   myst-parser
+    #   pandas
     #   sphinx
 jsonschema==4.19.2
     # via
@@ -164,7 +165,7 @@ packaging==23.2
     #   matplotlib
     #   pydata-sphinx-theme
     #   sphinx
-pandas==2.1.2
+pandas[output-formatting]==2.1.2
     # via my-paper (pyproject.toml)
 parso==0.8.3
     # via jedi
@@ -302,7 +303,9 @@ sqlalchemy==2.0.23
 stack-data==0.6.3
     # via ipython
 tabulate==0.9.0
-    # via jupyter-cache
+    # via
+    #   jupyter-cache
+    #   pandas
 toml==0.10.2
     # via jupytext
 tornado==6.3.3
