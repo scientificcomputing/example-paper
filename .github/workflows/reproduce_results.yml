@@ -34,6 +34,16 @@ jobs:
         with:
           python-version: "3.10"
 
+      - name: Cache
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/pip
+          key: cache_v1
+          restore-keys: |
+            cache_v1
+
       - name: Install dependencies
         run: python3 -m pip install -r requirements.txt
 
@@ -47,6 +57,8 @@ jobs:
         run: python3 code/postprocess.py --resultdir=${{ env.RESULTDIR }} --datapath=${{ env.DATAPATH }} --figdir=${{ env.FIGDIR }}
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v2
+        if: always()
+        uses: actions/upload-artifact@v3
         with:
           path: ./artifacts
+          if-no-files-found: error
