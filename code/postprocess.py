@@ -232,7 +232,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = vars(parser.parse_args(argv))
 
     figdir = args["figdir"]
-    figdir.mkdir(exist_ok=True)
+    figdir.mkdir(exist_ok=True, parents=True)
 
     results = load_results(result_directory=args["resultdir"])
     data = load_data(datapath=args["datapath"])

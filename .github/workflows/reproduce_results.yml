@@ -1,0 +1,52 @@
+# Simple workflow for deploying static content to GitHub Pages
+name: Reproduce results
+
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches:
+    - "**"
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+
+jobs:
+  run:
+    runs-on: ubuntu-22.04
+    env:
+      # Directory that will be published on github pages
+      DATAPATH: ./artifacts/data/data.json
+      FIGDIR: ./artifacts/figures
+      RESULTDIR: ./artifacts/results
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: python3 -m pip install -r requirements.txt
+
+      - name: Run pre-processing
+        run: python3 code/pre_processing.py --datapath=${{ env.DATAPATH }}
+
+      - name: Run simulation
+        run: python3 code/run_all.py --resultdir=${{ env.RESULTDIR }}
+
+      - name: Postprocess
+        run: python3 code/postprocess.py --resultdir=${{ env.RESULTDIR }} --datapath=${{ env.DATAPATH }} --figdir=${{ env.FIGDIR }}
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: ./artifacts
