@@ -38,7 +38,7 @@ def generate_syntetic_data(datapath: Path) -> None:
 
     v = v_all.average_beat()
     w = w_all.average_beat()
-
+    datapath.parent.mkdir(exist_ok=True, parents=True)
     datapath.write_text(
         json.dumps(
             {
