@@ -28,6 +28,16 @@ jobs:
       - name: Install dependencies
         run: python3 -m pip install -r requirements-docs.txt
 
+      - name: Cache
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/pip
+          key: cache_v1
+          restore-keys: |
+            cache_v1
+
       - name: Build docs
         run: jupyter book build .
 
