@@ -21,7 +21,6 @@ parameter_sets = [
 ]
 
 if __name__ == "__main__":
-
     for p in parameter_sets:
         # This would by the equivalent list of arguments passe from the command line
         args = ["-o", result_directory.as_posix(), "-a", str(p["a"]), "-b", str(p["b"])]
