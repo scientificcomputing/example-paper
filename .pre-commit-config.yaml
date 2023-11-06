@@ -32,3 +32,9 @@ repos:
     rev: v1.6.1
     hooks:
       - id: mypy
+
+  - repo: https://github.com/streetsidesoftware/cspell-cli
+    rev: v7.3.2
+    hooks:
+      - id: cspell
+        files: docs/(.+).md|README.md

@@ -3,7 +3,7 @@
 
 This repository contains supplementary code for the paper
 > Finsberg, H., Dokken, J. 2022.
-> Title of paper, Journal of blabla, volume, page, url
+> Title of paper, Journal of ..., volume, page, url
 
 
 ## Abstract

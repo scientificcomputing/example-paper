@@ -1,0 +1,19 @@
+{
+    "version": "0.2",
+    "ignorePaths": [],
+    "dictionaryDefinitions": [],
+    "dictionaries": [],
+    "words": [
+        "docname",
+        "docnames",
+        "Dokken",
+        "Finsberg",
+        "fitzhugh",
+        "nagumo",
+        "postprocess",
+        "scientificcomputing",
+        "zenodo"
+    ],
+    "ignoreWords": [],
+    "import": []
+}
