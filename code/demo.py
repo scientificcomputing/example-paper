@@ -1,29 +1,15 @@
-# ---
-# jupyter:
-#   jupytext:
-#     text_representation:
-#       extension: .py
-#       format_name: light
-#       format_version: '1.5'
-#       jupytext_version: 1.15.2
-#   kernelspec:
-#     display_name: Python 3.10.6 64-bit ('3.10.6')
-#     language: python
-#     name: python3
-# ---
 # # Demo
 #
 # This notebook contains a simple demo on how to work with the code.
+#
+
 import sys
-
-sys.path.insert(0, "../code")
-
-# +
 import numpy as np
 from scipy.integrate import solve_ivp
 import ap_features as apf
 
-from run_simulation import fitzhugh_nagumo
+sys.path.insert(0, "../code")
+from run_simulation import fitzhugh_nagumo  # noqa: E402
 
 # +
 a = -0.22
