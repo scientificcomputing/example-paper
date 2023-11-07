@@ -2,9 +2,10 @@
 # Learn more at https://jupyterbook.org/customize/config.html
 
 title: Example paper
-author: Henrik Finsberg
+author: Henrik Finsberg and Jørgen Dokken
 logo: "docs/logo.png"
-copyright: "2022"
+copyright: "2023"
+only_build_toc_files: true
 
 # Force re-execution of notebooks on each build.
 # See https://jupyterbook.org/content/execute.html
@@ -30,13 +31,24 @@ parse:
     - dollarmath
     - linkify
 
+
 sphinx:
   config:
     bibtex_bibfiles: ["docs/refs.bib"]
+    nb_execution_show_tb: True
+    html_theme_options:
+      navigation_with_keys: false
     html_last_updated_fmt: "%b %d, %Y"
+    nb_custom_formats:  # https://jupyterbook.org/en/stable/file-types/jupytext.html#file-types-custom
+        .py:
+            - jupytext.reads
+            - fmt: py
 
   extra_extensions:
   - 'sphinx.ext.autodoc'
   - 'sphinx.ext.napoleon'
   - 'sphinx.ext.viewcode'
   - "sphinxcontrib.bibtex"
+
+
+exclude_patterns: [".pytest_cache/*", ".github/*"]

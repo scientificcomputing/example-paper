@@ -1,0 +1,59 @@
+# Simple workflow for deploying static content to GitHub Pages
+name: Reproduce results
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+    # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+  workflow_call:
+
+
+jobs:
+  run:
+    runs-on: ubuntu-22.04
+    env:
+      # Directory that will be published on github pages
+      DATAPATH: ./artifacts/data/data.json
+      FIGDIR: ./artifacts/figures
+      RESULTDIR: ./artifacts/results
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Cache
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/pip
+          key: cache_v1
+          restore-keys: |
+            cache_v1
+
+      - name: Install dependencies
+        run: python3 -m pip install -r requirements.txt
+
+      - name: Run pre-processing
+        run: python3 code/pre_processing.py --datapath=${{ env.DATAPATH }}
+
+      - name: Run simulation
+        run: python3 code/run_all.py --resultdir=${{ env.RESULTDIR }}
+
+      - name: Postprocess
+        run: python3 code/postprocess.py --resultdir=${{ env.RESULTDIR }} --datapath=${{ env.DATAPATH }} --figdir=${{ env.FIGDIR }}
+
+      - name: Upload artifact
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          path: ./artifacts
+          if-no-files-found: error

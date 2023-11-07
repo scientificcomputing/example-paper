@@ -2,6 +2,7 @@
 data/*
 code/results/*
 code/figures/*
+_build
 
 
 ### Python ###

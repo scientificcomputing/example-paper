@@ -9,6 +9,8 @@ recreate the figures and tables.
 """
 from __future__ import annotations
 
+from typing import Sequence
+import argparse
 import json
 from dataclasses import dataclass
 from datetime import datetime
@@ -19,8 +21,8 @@ import ap_features as apf
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from pre_processing import datapath
-from run_all import result_directory
+
+here = Path(__file__).absolute().parent
 
 
 @dataclass
@@ -71,6 +73,8 @@ class Result:
 
 def load_result(path: Path) -> Result:
     """Load result from json file into a Result object"""
+    if not path.is_file():
+        raise FileNotFoundError(f"File {path} does not exist")
     data = json.loads(path.read_text())
     data["y"] = np.array(data["y"])
     data["time"] = np.array(data["time"])
@@ -79,8 +83,12 @@ def load_result(path: Path) -> Result:
     return Result(**data)
 
 
-def load_results() -> list[Result]:
+def load_results(result_directory: Path) -> list[Result]:
     """Load all results from the result directory"""
+
+    if not result_directory.is_dir():
+        raise FileNotFoundError(f"Directory {result_directory} does not exist")
+
     results: list[Result] = []
     for path in result_directory.iterdir():
         if not path.suffix == ".json":
@@ -89,7 +97,9 @@ def load_results() -> list[Result]:
     return results
 
 
-def load_data():
+def load_data(datapath: Path):
+    if not datapath.is_file():
+        raise FileNotFoundError(f"File {datapath} does not exist")
     return json.loads(datapath.read_text())
 
 
@@ -107,7 +117,11 @@ def align_at_peak(
     return new_t_v, new_t_w
 
 
-def figure1(results: list[Result], data: dict[str, list[float]], fname: str) -> None:
+def figure1(
+    results: list[Result],
+    data: dict[str, list[float]],
+    fname: str,
+) -> None:
     """Reproducing Figure 1 in the paper"""
     fig, ax = plt.subplots(2, 1, figsize=(12, 6))
     lines = []
@@ -153,9 +167,14 @@ def figure1(results: list[Result], data: dict[str, list[float]], fname: str) -> 
         title="Parameters",
     )
     fig.savefig(fname, bbox_inches="tight", dpi=500)
+    print(f"Save figure 1 to {fname}")
+
+    r1 = next(filter(lambda d: np.allclose((d.a, d.b), (-0.3, 1.1)), results))
+    assert np.isclose(r1.v.max(), 1.1020528, rtol=1e-3), r1.v.max()
+    assert np.isclose(r1.w.max(), 0.6689413, rtol=1e-3), r1.w.max()
 
 
-def table1(results: list[Result]):
+def table1(results: list[Result], outfile: Path):
     """Reproduce table 1 in the paper by printing the Latex table"""
     data = []
     for result in results:
@@ -169,19 +188,63 @@ def table1(results: list[Result]):
                 "Beatrate (W)": result.beatrate_w,
             },
         )
+
+    assert len(data) == 6
+
+    r1 = next(filter(lambda d: np.allclose((d["a"], d["b"]), (-0.2, 1.1)), data))
+    assert np.isclose(r1["APD50 (V)"], 32.3730067, rtol=1e-3), r1["APD50 (V)"]
+    assert np.isclose(r1["APD50 (W)"], 31.8498996, rtol=1e-3), r1["APD50 (W)"]
+
+    r2 = next(filter(lambda d: np.allclose((d["a"], d["b"]), (-0.3, 1.2)), data))
+    assert np.isclose(r2["APD50 (V)"], 28.9285658187, rtol=1e-3), r2["APD50 (V)"]
+    assert np.isclose(r2["APD50 (W)"], 29.1713021926, rtol=1e-3), r2["APD50 (W)"]
+
     df = pd.DataFrame(data)
-    print(df.style.to_latex())
+    table = df.style.to_latex()
+    outfile.write_text(table)
+    print(f"Save table to {outfile}")
+    print(table)
 
 
-def main():
-    figdir = Path("figures")
-    figdir.mkdir(exist_ok=True)
-    results = load_results()
-    data = load_data()
+def main(argv: Sequence[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(
+        description=__doc__,
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    parser.add_argument(
+        "-f",
+        "--figdir",
+        type=Path,
+        default=here / "figures",
+        help="Directory where to dump the figures",
+    )
+    parser.add_argument(
+        "-r",
+        "--resultdir",
+        type=Path,
+        default=here / "results",
+        help="Directory where the results are stored",
+    )
+    parser.add_argument(
+        "-d",
+        "--datapath",
+        type=Path,
+        default=here / ".." / "data" / "data.json",
+        help="Directory where the results are stored",
+    )
+    args = vars(parser.parse_args(argv))
+
+    figdir = args["figdir"]
+    figdir.mkdir(exist_ok=True, parents=True)
+
+    results = load_results(result_directory=args["resultdir"])
+    data = load_data(datapath=args["datapath"])
 
     figure1(results, data, figdir / "figure1.png")
-    table1(results)
+    table1(results, outfile=figdir / "table1.txt")
+
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

@@ -1,6 +1,8 @@
+_build
 code/results
-data/data.txt
+data/data.json
 code/figures
+.DS_Store
 # Created by https://www.toptal.com/developers/gitignore/api/python,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,visualstudiocode
 

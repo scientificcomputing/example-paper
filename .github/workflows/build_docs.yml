@@ -1,6 +1,9 @@
-name: Github Pages
+# Simple workflow for deploying static content to GitHub Pages
+name: Deploy static content to Pages
 
 on:
+  push:
+    branches: ["main"]
   pull_request:
     branches: ["main"]
 
@@ -16,22 +19,54 @@ jobs:
       PUBLISH_DIR: ./_build/html
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.10"
 
+      - name: Cache
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/pip
+            ~/_build
+          key: cache_v1
+          restore-keys: |
+            cache_v1
+
       - name: Install dependencies
         run: python3 -m pip install -r requirements-docs.txt
 
+
       - name: Build docs
         run: jupyter book build .
-  
-      - name: Upload documentation as artifact
-        uses: actions/upload-artifact@v3
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
         with:
-          name: documentation
           path: ${{ env.PUBLISH_DIR }}
-          if-no-files-found: error
+
+  # Single deploy job since we're just deploying
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
