@@ -1,11 +1,10 @@
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["setuptools>=61.2"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "my-paper"
-classifiers = ["Private :: Do Not Upload"]
-version = "0"
+version = "1.1.0"
 dependencies = [
     "ap_features",
     "matplotlib",
