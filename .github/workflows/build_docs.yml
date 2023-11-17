@@ -1,82 +1,50 @@
 # Simple workflow for deploying static content to GitHub Pages
-name: Deploy static content to Pages
+name: Build docs
 
 on:
-  # Runs on pushes targeting the default branch
-  push:
-    branches:
-    - "**"
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-# Allow one concurrent deployment
-concurrency:
-  group: "pages"
-  cancel-in-progress: true
+  workflow_call:
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  build_docs:
+    runs-on: ubuntu-22.04
     env:
-      # Directory that will be published on github pages
+      PYTHON_VERSION: "3.10"
       PUBLISH_DIR: ./_build/html
 
     steps:
+      # checkout the repository
       - uses: actions/checkout@v4
 
-      - name: Setup Python
+      # setup Python
+      - name: Install Python ${{ env.PYTHON_VERSION }}
         uses: actions/setup-python@v4
         with:
-          python-version: "3.10"
+          python-version: ${{ env.PYTHON_VERSION }}
 
-      - name: Cache
-        id: cache
+      # preserve pip cache to speed up installation
+      - name: Cache pip
         uses: actions/cache@v3
         with:
-          path: |
-            ~/.cache/pip
-            ~/_build
-          key: cache_v1
+          path: ~/.cache/pip
+          # Look to see if there is a cache hit for the corresponding requirements file
+          key: ${{ runner.os }}-pip-${{ hashFiles('*requirements-docs.txt') }}
           restore-keys: |
-            cache_v1
-
-      - name: Install dependencies
-        run: python3 -m pip install -r requirements-docs.txt
-
+            ${{ runner.os }}-pip-
+      - name: Install Python dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install -r requirements-docs.txt
 
       - name: Build docs
-        run: jupyter book build .
+        run: python3 -m jupyter book build .
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
+          name: documentation
           path: ${{ env.PUBLISH_DIR }}
-
-  # Single deploy job since we're just deploying
-  deploy:
-    if: github.ref == 'refs/heads/main'
-    needs: build
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v3
-
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v2
+          if-no-files-found: error
