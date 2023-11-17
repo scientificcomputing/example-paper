@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61.2"]
+requires = ["setuptools>=64.4.0", "wheel", "pip>=22.3"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -25,6 +25,9 @@ docs = [
     "jupytext",
     "sphinxcontrib-bibtex",
 ]
+
+[tool.setuptools]
+packages = []
 
 [tool.ruff]
 # Enable pycodestyle (`E`) and Pyflakes (`F`) codes by default.
