@@ -43,7 +43,7 @@ jobs:
         run: python3 -m jupyter book build .
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: documentation
           path: ${{ env.PUBLISH_DIR }}
