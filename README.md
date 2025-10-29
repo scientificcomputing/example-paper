@@ -11,7 +11,19 @@ Provide the abstract of the paper
 
 ## Getting started
 
-We provide a pre-build Docker image which can be used to run the the code in this repository. First thing you need to do is to ensure that you have [docker installed](https://docs.docker.com/get-docker/).
+First install `uv`
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+Then create a virtual environment and install dependencies
+
+```bash
+uv venv
+source .venv/bin/activate
+uv sync --locked --all-extras --dev
+```
+
+We also provide a pre-build Docker image which can be used to run the the code in this repository. First thing you need to do is to ensure that you have [docker installed](https://docs.docker.com/get-docker/).
 
 To start an interactive docker container you can execute the following command
 
