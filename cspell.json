@@ -12,7 +12,8 @@
         "nagumo",
         "postprocess",
         "scientificcomputing",
-        "zenodo"
+        "zenodo",
+        "venv"
     ],
     "ignoreWords": [],
     "import": []
