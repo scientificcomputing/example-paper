@@ -10,30 +10,30 @@ on:
 
 jobs:
   build_docs:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     env:
-      PYTHON_VERSION: "3.10"
+      PYTHON_VERSION: "3.12"
       PUBLISH_DIR: ./_build/html
 
     steps:
       # checkout the repository
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       # setup Python
       - name: Install Python ${{ env.PYTHON_VERSION }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
       # preserve pip cache to speed up installation
       - name: Cache pip
-        uses: actions/cache@v3
+        uses: actions/cache@v5
         with:
           path: ~/.cache/pip
           # Look to see if there is a cache hit for the corresponding requirements file
           key: ${{ runner.os }}-pip-${{ hashFiles('*requirements-docs.txt') }}
           restore-keys: |
-            ${{ runner.os }}-pip-
+            ${{ runner.os }}-pip-${{ hashFiles('requirements-docs.txt') }}
       - name: Install Python dependencies
         run: |
           python3 -m pip install --upgrade pip
@@ -43,7 +43,7 @@ jobs:
         run: python3 -m jupyter book build .
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v5
         with:
           name: documentation
           path: ${{ env.PUBLISH_DIR }}
