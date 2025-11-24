@@ -22,7 +22,7 @@ jobs:
       RESULTDIR: ./artifacts/results
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
     # setup Python
       - name: Install Python
