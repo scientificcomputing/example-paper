@@ -34,7 +34,6 @@ jobs:
         run: uv run jupyter book build .
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-pages-artifact@v4
         with:
-          name: documentation
           path: ${{ env.PUBLISH_DIR }}
